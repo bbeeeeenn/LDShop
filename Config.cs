@@ -76,7 +76,7 @@ public class PluginSettings
             new List<Models.ShopItem> { }
         },
         {
-            "postSkeletron",
+            "postSkeletronPrimes",
             new List<Models.ShopItem> { }
         },
         {
@@ -101,6 +101,10 @@ public class PluginSettings
         },
     };
     #endregion
+
+
+
+
     public static string PluginDisplayName { get; set; } = "LDShop";
     public static readonly string ConfigPath = Path.Combine(
         TShock.SavePath,

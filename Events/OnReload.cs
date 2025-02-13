@@ -1,5 +1,4 @@
 using LDShop.Models;
-using LDShop.Utils;
 using TerrariaApi.Server;
 using TShockAPI;
 using TShockAPI.Hooks;
