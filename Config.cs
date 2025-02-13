@@ -1,14 +1,17 @@
 using Microsoft.Xna.Framework;
 using Newtonsoft.Json;
+using Shop.Utils;
 using TShockAPI;
-using TShockPlugin.Utils;
 
-namespace TShockPlugin;
+namespace Shop;
 
 public class PluginSettings
 {
     public static string PluginDisplayName { get; set; } = "Plugin";
-    public static readonly string ConfigPath = Path.Combine(TShock.SavePath, "TemplateConfig.json");
+    public static readonly string ConfigPath = Path.Combine(
+        TShock.SavePath,
+        $"{PluginDisplayName}/config.json"
+    );
     public static PluginSettings Config { get; private set; } = new();
 
     public static void Save()
@@ -19,6 +22,10 @@ public class PluginSettings
 
     public static MessageResponse Load()
     {
+        if (!Directory.Exists($"/{PluginDisplayName}"))
+        {
+            Directory.CreateDirectory($"/{PluginDisplayName}");
+        }
         if (File.Exists(ConfigPath))
         {
             try

@@ -2,12 +2,12 @@
 using TerrariaApi.Server;
 using TShockAPI;
 
-namespace TShockPlugin
+namespace Shop
 {
     [ApiVersion(2, 1)]
     public class TShockPlugin : TerrariaPlugin
     {
-        public override string Name => "TShock Plugin";
+        public override string Name => "LDShop";
         public override string Author => "TRANQUILZOIIP - github.com/bbeeeeenn";
         public override string Description => base.Description;
         public override Version Version => base.Version;

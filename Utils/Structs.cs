@@ -1,4 +1,4 @@
-namespace TShockPlugin.Utils;
+namespace Shop.Utils;
 
 public struct MessageResponse
 {

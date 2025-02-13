@@ -1,14 +1,12 @@
-using TShockPlugin.Commands;
-using TShockPlugin.Models;
+using Shop.Models;
 
-namespace TShockPlugin;
+namespace Shop;
 
 public class CommandManager
 {
     public static readonly List<Command> Commands = new()
     {
         // Commands
-        new DummyCommand(),
     };
 
     public static void RegisterAll()

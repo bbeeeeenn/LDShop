@@ -1,10 +1,10 @@
+using Shop.Models;
+using Shop.Utils;
 using TerrariaApi.Server;
 using TShockAPI;
 using TShockAPI.Hooks;
-using TShockPlugin.Models;
-using TShockPlugin.Utils;
 
-namespace TShockPlugin.Events;
+namespace Shop.Events;
 
 public class OnReload : Event
 {
