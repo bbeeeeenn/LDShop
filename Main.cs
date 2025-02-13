@@ -2,7 +2,7 @@
 using TerrariaApi.Server;
 using TShockAPI;
 
-namespace Shop
+namespace LDShop
 {
     [ApiVersion(2, 1)]
     public class TShockPlugin : TerrariaPlugin

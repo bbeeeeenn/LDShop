@@ -1,6 +1,6 @@
-using Shop.Models;
+using LDShop.Models;
 
-namespace Shop;
+namespace LDShop;
 
 public class CommandManager
 {

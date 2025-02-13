@@ -1,9 +1,8 @@
 using Microsoft.Xna.Framework;
 using Newtonsoft.Json;
-using Shop.Utils;
 using TShockAPI;
 
-namespace Shop;
+namespace LDShop;
 
 public class PluginSettings
 {
@@ -11,11 +10,11 @@ public class PluginSettings
     public string ShopRegionName = "Shop";
     #endregion
     #region ShopList
-    public Dictionary<string, List<Structs.ShopItem>> Items = new()
+    public Dictionary<string, List<Models.ShopItem>> Items = new()
     {
         {
             "regular",
-            new List<Structs.ShopItem>()
+            new List<Models.ShopItem>()
             {
                 new()
                 {
@@ -30,35 +29,75 @@ public class PluginSettings
         },
         {
             "postKingSlime",
-            new List<Structs.ShopItem> { }
+            new List<Models.ShopItem> { }
         },
         {
             "postEyeOfCthulhu",
-            new List<Structs.ShopItem> { }
+            new List<Models.ShopItem> { }
         },
         {
             "postEaterOfWorlds",
-            new List<Structs.ShopItem> { }
+            new List<Models.ShopItem> { }
         },
         {
             "postBrainOfCthulhu",
-            new List<Structs.ShopItem> { }
+            new List<Models.ShopItem> { }
         },
         {
             "postQueenBee",
-            new List<Structs.ShopItem> { }
+            new List<Models.ShopItem> { }
         },
         {
             "postSkeletron",
-            new List<Structs.ShopItem> { }
+            new List<Models.ShopItem> { }
         },
         {
             "postDeerclops",
-            new List<Structs.ShopItem> { }
+            new List<Models.ShopItem> { }
         },
         {
             "postWallOfFlesh",
-            new List<Structs.ShopItem> { }
+            new List<Models.ShopItem> { }
+        },
+        {
+            "postQueenSlime",
+            new List<Models.ShopItem> { }
+        },
+        {
+            "postDukeFishron",
+            new List<Models.ShopItem> { }
+        },
+        {
+            "postEmpressOfLight",
+            new List<Models.ShopItem> { }
+        },
+        {
+            "postDestroyer",
+            new List<Models.ShopItem> { }
+        },
+        {
+            "postSkeletron",
+            new List<Models.ShopItem> { }
+        },
+        {
+            "postTwins",
+            new List<Models.ShopItem> { }
+        },
+        {
+            "postPlantera",
+            new List<Models.ShopItem> { }
+        },
+        {
+            "postGolem",
+            new List<Models.ShopItem> { }
+        },
+        {
+            "postLunaticCultist",
+            new List<Models.ShopItem> { }
+        },
+        {
+            "postMoonlord",
+            new List<Models.ShopItem> { }
         },
     };
     #endregion
@@ -75,7 +114,7 @@ public class PluginSettings
         File.WriteAllText(ConfigPath, configJson);
     }
 
-    public static Structs.MessageResponse Load()
+    public static Models.ResponseMessage Load()
     {
         if (File.Exists(ConfigPath))
         {
@@ -88,7 +127,7 @@ public class PluginSettings
                 if (deserializedConfig != null)
                 {
                     Config = deserializedConfig;
-                    return new Structs.MessageResponse()
+                    return new Models.ResponseMessage()
                     {
                         Text = $"[{PluginDisplayName}] Loaded config.",
                         Color = Color.LimeGreen,
@@ -96,7 +135,7 @@ public class PluginSettings
                 }
                 else
                 {
-                    return new Structs.MessageResponse()
+                    return new Models.ResponseMessage()
                     {
                         Text =
                             $"[{PluginDisplayName}] Config file was found, but deserialization returned null.",
@@ -109,7 +148,7 @@ public class PluginSettings
                 TShock.Log.ConsoleError(
                     $"[{PluginDisplayName}] Error loading config: {ex.Message}"
                 );
-                return new Structs.MessageResponse()
+                return new Models.ResponseMessage()
                 {
                     Text =
                         $"[{PluginDisplayName}] Error loading config. Check logs for more details.",
@@ -120,7 +159,7 @@ public class PluginSettings
         else
         {
             Save();
-            return new Structs.MessageResponse()
+            return new Models.ResponseMessage()
             {
                 Text =
                     $"[{PluginDisplayName}] Config file doesn't exist yet. A new one has been created.",

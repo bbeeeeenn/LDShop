@@ -1,8 +1,8 @@
-using Shop.Events;
-using Shop.Models;
+using LDShop.Events;
+using LDShop.Models;
 using TerrariaApi.Server;
 
-namespace Shop;
+namespace LDShop;
 
 public class EventManager
 {

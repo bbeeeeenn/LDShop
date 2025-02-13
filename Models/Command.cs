@@ -1,6 +1,6 @@
 using TShockAPI;
 
-namespace Shop.Models;
+namespace LDShop.Models;
 
 public abstract class Command
 {

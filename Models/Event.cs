@@ -1,6 +1,6 @@
 using TerrariaApi.Server;
 
-namespace Shop.Models;
+namespace LDShop.Models;
 
 public abstract class Event
 {

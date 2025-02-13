@@ -1,10 +1,10 @@
-using Shop.Models;
-using Shop.Utils;
+using LDShop.Models;
+using LDShop.Utils;
 using TerrariaApi.Server;
 using TShockAPI;
 using TShockAPI.Hooks;
 
-namespace Shop.Events;
+namespace LDShop.Events;
 
 public class OnReload : Event
 {
@@ -21,7 +21,7 @@ public class OnReload : Event
     private void EventMethod(ReloadEventArgs e)
     {
         TSPlayer player = e.Player;
-        Structs.MessageResponse response = PluginSettings.Load();
+        Models.ResponseMessage response = PluginSettings.Load();
         player.SendMessage(response.Text, response.Color);
     }
 }
