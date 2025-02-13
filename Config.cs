@@ -7,7 +7,6 @@ namespace LDShop;
 public class PluginSettings
 {
     #region Config
-    public string ShopRegionName = "Shop";
     #endregion
     #region ShopList
     public Dictionary<string, List<Models.ShopItem>> Items = new()
@@ -101,8 +100,6 @@ public class PluginSettings
         },
     };
     #endregion
-
-
 
 
     public static string PluginDisplayName { get; set; } = "LDShop";
