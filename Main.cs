@@ -13,10 +13,7 @@ namespace Shop
         public override Version Version => base.Version;
 
         public TShockPlugin(Main game)
-            : base(game)
-        {
-            PluginSettings.PluginDisplayName = Name;
-        }
+            : base(game) { }
 
         public override void Initialize()
         {
