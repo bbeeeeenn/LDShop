@@ -35,11 +35,7 @@ public class PluginSettings
             new List<Models.ShopItem> { }
         },
         {
-            "postEaterOfWorlds",
-            new List<Models.ShopItem> { }
-        },
-        {
-            "postBrainOfCthulhu",
+            "postEvilBoss",
             new List<Models.ShopItem> { }
         },
         {
@@ -71,15 +67,7 @@ public class PluginSettings
             new List<Models.ShopItem> { }
         },
         {
-            "postDestroyer",
-            new List<Models.ShopItem> { }
-        },
-        {
-            "postSkeletronPrimes",
-            new List<Models.ShopItem> { }
-        },
-        {
-            "postTwins",
+            "postMech",
             new List<Models.ShopItem> { }
         },
         {
