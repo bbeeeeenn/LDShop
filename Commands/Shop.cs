@@ -40,6 +40,23 @@ public class Shop : Models.Command
 
     private static void ShopList(TSPlayer player)
     {
+        List<Models.ShopItem> list = AllShopItems();
+
+        player.SendMessage(
+            "[SHOP] List of items present in the shop\n"
+                + string.Join(
+                    "\n",
+                    list.Select(
+                        (item, i) =>
+                            $"- {i + 1} [[i/p{item.prefixID}:{item.netID}]] - {TShock.Utils.GetItemById(item.netID).HoverName} ({(item.amount < 0 ? "INF" : item.amount)}) B:{EconomyUtils.BalanceToCoin(item.buyprice)[1]} S:{EconomyUtils.BalanceToCoin(item.sellprice)[1]}"
+                    )
+                ),
+            Color.AliceBlue
+        );
+    }
+
+    private static List<Models.ShopItem> AllShopItems()
+    {
         List<Models.ShopItem> list = new();
         AddItems(list, "regular", true);
         AddItems(list, "postKingSlime", NPC.downedSlimeKing);
@@ -47,7 +64,7 @@ public class Shop : Models.Command
         AddItems(list, "postEvilBoss", NPC.downedBoss2);
         AddItems(list, "postSkeletron", NPC.downedBoss3);
         AddItems(list, "postQueenBee", NPC.downedQueenBee);
-        AddItems(list, "postDeerClops", NPC.downedDeerclops);
+        AddItems(list, "postDeerclops", NPC.downedDeerclops);
         AddItems(list, "postWallOfFlesh", Main.hardMode);
         AddItems(list, "postQueenSlime", NPC.downedQueenSlime);
         AddItems(list, "postDukeFishron", NPC.downedFishron);
@@ -62,16 +79,7 @@ public class Shop : Models.Command
         AddItems(list, "postLunaticCultist", NPC.downedAncientCultist);
         AddItems(list, "postMoonlord", NPC.downedMoonlord);
 
-        player.SendMessage(
-            "[SHOP] List of items present in the shop\n"
-                + string.Join(
-                    "\n",
-                    list.Select(item =>
-                        $"- [[i/p{item.prefixID}:{item.netID}]] - {TShock.Utils.GetItemById(item.netID).HoverName} ({(item.amount < 0 ? "INF" : item.amount)}) B:{EconomyUtils.BalanceToCoin(item.buyprice)[1]} S:{EconomyUtils.BalanceToCoin(item.sellprice)[1]}"
-                    )
-                ),
-            Color.AliceBlue
-        );
+        return list;
     }
 
     private static void AddItems(List<Models.ShopItem> list, string key, bool condition)
