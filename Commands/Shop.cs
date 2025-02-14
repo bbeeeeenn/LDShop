@@ -1,6 +1,6 @@
+using LDEconomy.Utils;
 using Microsoft.Xna.Framework;
 using Terraria;
-using TerrariaApi.Server;
 using TShockAPI;
 
 namespace LDShop.Commands;
@@ -61,6 +61,17 @@ public class Shop : Models.Command
         AddItems(list, "postGolem", NPC.downedGolemBoss);
         AddItems(list, "postLunaticCultist", NPC.downedAncientCultist);
         AddItems(list, "postMoonlord", NPC.downedMoonlord);
+
+        player.SendMessage(
+            "[SHOP] List of items present in the shop\n"
+                + string.Join(
+                    "\n",
+                    list.Select(item =>
+                        $"- [[i/p{item.prefixID}:{item.netID}]] - {TShock.Utils.GetItemById(item.netID).HoverName} ({(item.amount < 0 ? "INF" : item.amount)}) B:{EconomyUtils.BalanceToCoin(item.buyprice)[1]} S:{EconomyUtils.BalanceToCoin(item.sellprice)[1]}"
+                    )
+                ),
+            Color.AliceBlue
+        );
     }
 
     private static void AddItems(List<Models.ShopItem> list, string key, bool condition)
