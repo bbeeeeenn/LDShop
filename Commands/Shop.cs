@@ -40,18 +40,17 @@ public class Shop : Models.Command
 
     private static void ShopList(TSPlayer player)
     {
-        List<Models.ShopItem> list = AllShopItems();
-
         player.SendMessage(
-            "[SHOP] List of items present in the shop\n"
+            "[c/2aa351:[SHOP][c/2aa351:] List of items present in the shop]\n"
                 + string.Join(
                     "\n",
-                    list.Select(
-                        (item, i) =>
-                            $"- {i + 1} [[i/p{item.prefixID}:{item.netID}]] - {TShock.Utils.GetItemById(item.netID).HoverName} ({(item.amount < 0 ? "INF" : item.amount)}) B:{EconomyUtils.BalanceToCoin(item.buyprice)[1]} S:{EconomyUtils.BalanceToCoin(item.sellprice)[1]}"
-                    )
+                    AllShopItems()
+                        .Select(
+                            (item, i) =>
+                                $"- {i + 1} [[i/p{item.prefixID}:{item.netID}]] - {TShock.Utils.GetItemById(item.netID).HoverName} ([c/187335:{(item.amount < 0 ? "+" : item.amount)}]) [c/dfe62c:B]: {EconomyUtils.BalanceToCoin(item.buyprice)[1]} [c/e6672c:S]: {EconomyUtils.BalanceToCoin(item.sellprice)[1]}"
+                        )
                 ),
-            Color.AliceBlue
+            Color.Cyan
         );
     }
 
@@ -62,8 +61,8 @@ public class Shop : Models.Command
         AddItems(list, "postKingSlime", NPC.downedSlimeKing);
         AddItems(list, "postEyeOfCthulhu", NPC.downedBoss1);
         AddItems(list, "postEvilBoss", NPC.downedBoss2);
-        AddItems(list, "postSkeletron", NPC.downedBoss3);
         AddItems(list, "postQueenBee", NPC.downedQueenBee);
+        AddItems(list, "postSkeletron", NPC.downedBoss3);
         AddItems(list, "postDeerclops", NPC.downedDeerclops);
         AddItems(list, "postWallOfFlesh", Main.hardMode);
         AddItems(list, "postQueenSlime", NPC.downedQueenSlime);
