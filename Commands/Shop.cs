@@ -1,4 +1,5 @@
 using LDEconomy.Utils;
+using LDShop.Models;
 using Microsoft.Xna.Framework;
 using Terraria;
 using TShockAPI;
@@ -33,7 +34,13 @@ public class Shop : Models.Command
             case "list":
                 ShopList(player);
                 break;
+            case "buy":
+                ShopBuy(player, args.Parameters);
+                break;
             default:
+                player.SendErrorMessage(
+                    "[SHOP] Invalid command. Use /shop for a list of commands."
+                );
                 break;
         }
     }
@@ -41,22 +48,94 @@ public class Shop : Models.Command
     private static void ShopList(TSPlayer player)
     {
         player.SendMessage(
-            "[c/2aa351:[SHOP][c/2aa351:] List of items present in the shop]\n"
+            "[SHOP] List of items available in the shop:\n"
                 + string.Join(
                     "\n",
                     AllShopItems()
                         .Select(
                             (item, i) =>
-                                $"- {i + 1} [[i/p{item.prefixID}:{item.netID}]] - {TShock.Utils.GetItemById(item.netID).HoverName} ([c/187335:{(item.amount < 0 ? "+" : item.amount)}]) [c/dfe62c:B]: {EconomyUtils.BalanceToCoin(item.buyprice)[1]} [c/e6672c:S]: {EconomyUtils.BalanceToCoin(item.sellprice)[1]}"
+                            {
+                                Item itm = TShock.Utils.GetItemById(item.netID);
+                                itm.prefix = item.prefixID;
+                                return $"- {i + 1} [[i/p{item.prefixID}:{item.netID}]] - {itm.HoverName} ({(item.amount < 0 ? "∞" : item.amount.ToString())}) Buy: {EconomyUtils.BalanceToCoin(item.buyprice)[1]} Sell: {EconomyUtils.BalanceToCoin(item.sellprice)[1]}";
+                            }
                         )
                 ),
             Color.Cyan
         );
     }
 
-    private static List<Models.ShopItem> AllShopItems()
+    private static void ShopBuy(TSPlayer player, List<string> parameters)
     {
-        List<Models.ShopItem> list = new();
+        if (parameters.Count < 2)
+        {
+            player.SendErrorMessage(
+                "[SHOP] Invalid syntax. Proper syntax: /shop buy <item index/name> [quantity]."
+            );
+            return;
+        }
+
+        var ItemList = AllShopItems();
+
+        if (
+            !int.TryParse(parameters[1], out int itemIndex)
+            || itemIndex > ItemList.Count
+            || itemIndex < 1
+        )
+        {
+            player.SendErrorMessage("[SHOP] Invalid item index.");
+            return;
+        }
+
+        var PlayerBanks = LDEconomy.Variables.PlayerMoney;
+        ShopItem wantedItem = ItemList[itemIndex - 1];
+        Item item = TShock.Utils.GetItemById(wantedItem.netID);
+        int quantity = 1;
+
+        if (parameters.Count >= 3 && int.TryParse(parameters[2], out int n) && n > 1)
+        {
+            quantity = n;
+        }
+
+        if (wantedItem.amount == 0)
+        {
+            player.SendErrorMessage("[SHOP] This item is out of stock.");
+            return;
+        }
+        if (wantedItem.buyprice * quantity > PlayerBanks[player.Account.Name])
+        {
+            player.SendErrorMessage(
+                $"[SHOP] You do not have enough coins to buy {quantity}x [i/p{wantedItem.prefixID}:{wantedItem.netID}]."
+            );
+            return;
+        }
+        if (!player.InventorySlotAvailable)
+        {
+            player.SendErrorMessage("[SHOP] You do not have enough inventory space.");
+            return;
+        }
+
+        if (item.maxStack == 1)
+        {
+            for (int i = 0; i < quantity; i++)
+            {
+                player.GiveItem(wantedItem.netID, 1, wantedItem.prefixID);
+            }
+        }
+        else
+        {
+            player.GiveItem(wantedItem.netID, quantity);
+        }
+
+        EconomyUtils.TakeMoney(player, wantedItem.buyprice * quantity);
+        player.SendSuccessMessage(
+            $"[SHOP] You successfully bought {quantity}x [i/p{wantedItem.prefixID}:{wantedItem.netID}] for {EconomyUtils.BalanceToCoin(wantedItem.buyprice * quantity)[1]}."
+        );
+    }
+
+    private static List<ShopItem> AllShopItems()
+    {
+        List<ShopItem> list = new();
         AddItems(list, "regular", true);
         AddItems(list, "postKingSlime", NPC.downedSlimeKing);
         AddItems(list, "postEyeOfCthulhu", NPC.downedBoss1);
@@ -81,7 +160,7 @@ public class Shop : Models.Command
         return list;
     }
 
-    private static void AddItems(List<Models.ShopItem> list, string key, bool condition)
+    private static void AddItems(List<ShopItem> list, string key, bool condition)
     {
         if (condition)
         {
