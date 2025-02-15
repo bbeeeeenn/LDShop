@@ -48,7 +48,7 @@ public class Shop : Models.Command
     private static void ShopList(TSPlayer player)
     {
         player.SendMessage(
-            "[SHOP] List of items available in the shop:\n"
+            "[c/2aa351:[SHOP][c/2aa351:] List of items present in the shop]\n"
                 + string.Join(
                     "\n",
                     AllShopItems()
@@ -57,7 +57,7 @@ public class Shop : Models.Command
                             {
                                 Item itm = TShock.Utils.GetItemById(item.netID);
                                 itm.prefix = item.prefixID;
-                                return $"- {i + 1} [[i/p{item.prefixID}:{item.netID}]] - {itm.HoverName} ({(item.amount < 0 ? "∞" : item.amount.ToString())}) Buy: {EconomyUtils.BalanceToCoin(item.buyprice)[1]} Sell: {EconomyUtils.BalanceToCoin(item.sellprice)[1]}";
+                                return $"- {i + 1} [[i/p{item.prefixID}:{item.netID}]] - {itm.HoverName} ([c/187335:{(item.amount < 0 ? "+" : item.amount)}]) [c/dfe62c:B]: {EconomyUtils.BalanceToCoin(item.buyprice)[1]} [c/e6672c:S]: {EconomyUtils.BalanceToCoin(item.sellprice)[1]}";
                             }
                         )
                 ),
