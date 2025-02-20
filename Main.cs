@@ -25,7 +25,7 @@ namespace LDShop
             CommandManager.RegisterAll();
 
             // Load Shop
-            ShopItems.LoadShop();
+            TShock.Log.ConsoleInfo(ShopItems.LoadShop().Text);
         }
 
         protected override void Dispose(bool disposing)

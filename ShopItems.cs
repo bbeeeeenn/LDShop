@@ -1,3 +1,5 @@
+using LDShop.Models;
+using Microsoft.Xna.Framework;
 using Newtonsoft.Json;
 using TShockAPI;
 
@@ -93,11 +95,16 @@ public class ShopItems
         File.WriteAllText(Path, ShopJson);
     }
 
-    public static void LoadShop()
+    public static ResponseMessage LoadShop()
     {
         if (!File.Exists(Path))
         {
             SaveShop();
+            return new()
+            {
+                Text = "[ShopItems] The file doesn't exist yet. A new one has been created.",
+                Color = Color.Yellow,
+            };
         }
         else
         {
@@ -107,18 +114,24 @@ public class ShopItems
                 ShopItems? deserialized = JsonConvert.DeserializeObject<ShopItems>(json);
                 if (deserialized == null)
                 {
-                    TShock.Log.ConsoleError(
-                        "[ShopItems] Something went wrong. JSON deserialization returned null."
-                    );
-                    return;
+                    return new()
+                    {
+                        Text =
+                            "[ShopItems] Something went wrong. JSON deserialization returned null.",
+                        Color = Color.Red,
+                    };
                 }
 
                 Shop = deserialized;
-                TShock.Log.ConsoleInfo("[ShopItems] Loaded.");
+                return new() { Text = "[ShopItems] Loaded.", Color = Color.LimeGreen };
             }
             catch (Exception ex)
             {
                 TShock.Log.ConsoleError($"[ShopItems] {ex.Message}");
+                return new()
+                {
+                    Text = "[ShopItems] Something went wrong. Check logs for more details.",
+                };
             }
         }
     }
