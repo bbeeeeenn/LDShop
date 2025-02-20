@@ -7,13 +7,13 @@ namespace LDShop;
 public class PluginSettings
 {
     #region Config
-    public string ShopListPath = Path.Join(ConfigDirectory, "Shop.json");
+    public string ShopListPath = Path.Join(PluginDirectory, "Shop.json");
     #endregion
 
 
     public static string PluginDisplayName { get; set; } = "LDShop";
-    public static readonly string ConfigDirectory = Path.Join(TShock.SavePath, "LDShop");
-    public static readonly string ConfigPath = Path.Combine(ConfigDirectory, $"Config.json");
+    public static readonly string PluginDirectory = Path.Join(TShock.SavePath, "LDShop");
+    public static readonly string ConfigPath = Path.Combine(PluginDirectory, $"Config.json");
     public static PluginSettings Config { get; private set; } = new();
 
     public static void Save()
@@ -24,8 +24,8 @@ public class PluginSettings
 
     public static Models.ResponseMessage Load()
     {
-        if (!Directory.Exists(ConfigDirectory))
-            Directory.CreateDirectory(ConfigDirectory);
+        if (!Directory.Exists(PluginDirectory))
+            Directory.CreateDirectory(PluginDirectory);
         if (File.Exists(ConfigPath))
         {
             try

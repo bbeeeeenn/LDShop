@@ -51,7 +51,8 @@ public class Shop : Models.Command
             "[c/2aa351:[SHOP][c/2aa351:] List of items present in the shop]\n"
                 + string.Join(
                     "\n",
-                    AllShopItems()
+                    ShopItems
+                        .GetList()
                         .Select(
                             (item, i) =>
                             {
@@ -75,7 +76,7 @@ public class Shop : Models.Command
             return;
         }
 
-        var ItemList = AllShopItems();
+        var ItemList = ShopItems.GetList();
 
         if (
             !int.TryParse(parameters[1], out int itemIndex)
@@ -133,44 +134,4 @@ public class Shop : Models.Command
             $"[SHOP] You successfully bought {quantity}x [i/p{wantedItem.prefixID}:{wantedItem.netID}] for {EconomyUtils.BalanceToCoin(wantedItem.buyprice * quantity)[1]}."
         );
     }
-
-    private static List<ShopItem> AllShopItems()
-    {
-        List<ShopItem> list = new();
-        AddItems(list, "regular", true);
-        AddItems(list, "postKingSlime", NPC.downedSlimeKing);
-        AddItems(list, "postEyeOfCthulhu", NPC.downedBoss1);
-        AddItems(list, "postEvilBoss", NPC.downedBoss2);
-        AddItems(list, "postQueenBee", NPC.downedQueenBee);
-        AddItems(list, "postSkeletron", NPC.downedBoss3);
-        AddItems(list, "postDeerclops", NPC.downedDeerclops);
-        AddItems(list, "postWallOfFlesh", Main.hardMode);
-        AddItems(list, "postQueenSlime", NPC.downedQueenSlime);
-        AddItems(list, "postDukeFishron", NPC.downedFishron);
-        AddItems(list, "postEmpressOfLight", NPC.downedEmpressOfLight);
-        AddItems(
-            list,
-            "postMech",
-            NPC.downedMechBoss1 && NPC.downedMechBoss2 && NPC.downedMechBoss3
-        );
-        AddItems(list, "postPlantera", NPC.downedPlantBoss);
-        AddItems(list, "postGolem", NPC.downedGolemBoss);
-        AddItems(list, "postLunaticCultist", NPC.downedAncientCultist);
-        AddItems(list, "postMoonlord", NPC.downedMoonlord);
-
-        return list;
-    }
-
-    private static void AddItems(List<ShopItem> list, string key, bool condition)
-    {
-        if (condition)
-        {
-            foreach (var item in ShopItems.Shop.Items[key])
-            {
-                list.Add(item);
-            }
-        }
-    }
-
-    private static void Place(byte index) { }
 }

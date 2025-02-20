@@ -1,18 +1,20 @@
 using LDShop.Models;
 using Microsoft.Xna.Framework;
 using Newtonsoft.Json;
+using Terraria;
 using TShockAPI;
 
 namespace LDShop;
 
 public class ShopItems
 {
+    public static ShopItems Shop { get; set; } = new();
     private static readonly string Path = PluginSettings.Config.ShopListPath;
     public Dictionary<string, List<ShopItem>> Items = new()
     {
         {
             "regular",
-            new List<Models.ShopItem>()
+            new List<ShopItem>()
             {
                 new()
                 {
@@ -27,67 +29,65 @@ public class ShopItems
         },
         {
             "postKingSlime",
-            new List<Models.ShopItem> { }
+            new List<ShopItem> { }
         },
         {
             "postEyeOfCthulhu",
-            new List<Models.ShopItem> { }
+            new List<ShopItem> { }
         },
         {
             "postEvilBoss",
-            new List<Models.ShopItem> { }
+            new List<ShopItem> { }
         },
         {
             "postQueenBee",
-            new List<Models.ShopItem> { }
+            new List<ShopItem> { }
         },
         {
             "postSkeletron",
-            new List<Models.ShopItem> { }
+            new List<ShopItem> { }
         },
         {
             "postDeerclops",
-            new List<Models.ShopItem> { }
+            new List<ShopItem> { }
         },
         {
             "postWallOfFlesh",
-            new List<Models.ShopItem> { }
+            new List<ShopItem> { }
         },
         {
             "postQueenSlime",
-            new List<Models.ShopItem> { }
+            new List<ShopItem> { }
         },
         {
             "postDukeFishron",
-            new List<Models.ShopItem> { }
+            new List<ShopItem> { }
         },
         {
             "postEmpressOfLight",
-            new List<Models.ShopItem> { }
+            new List<ShopItem> { }
         },
         {
             "postMech",
-            new List<Models.ShopItem> { }
+            new List<ShopItem> { }
         },
         {
             "postPlantera",
-            new List<Models.ShopItem> { }
+            new List<ShopItem> { }
         },
         {
             "postGolem",
-            new List<Models.ShopItem> { }
+            new List<ShopItem> { }
         },
         {
             "postLunaticCultist",
-            new List<Models.ShopItem> { }
+            new List<ShopItem> { }
         },
         {
             "postMoonlord",
-            new List<Models.ShopItem> { }
+            new List<ShopItem> { }
         },
     };
-
-    public static ShopItems Shop { get; set; } = new();
 
     public static void SaveShop()
     {
@@ -132,6 +132,45 @@ public class ShopItems
                 {
                     Text = "[ShopItems] Something went wrong. Check logs for more details.",
                 };
+            }
+        }
+    }
+
+    public static List<ShopItem> GetList()
+    {
+        List<ShopItem> list = new();
+
+        AddItems(list, "regular", true);
+        AddItems(list, "postKingSlime", NPC.downedSlimeKing);
+        AddItems(list, "postEyeOfCthulhu", NPC.downedBoss1);
+        AddItems(list, "postEvilBoss", NPC.downedBoss2);
+        AddItems(list, "postQueenBee", NPC.downedQueenBee);
+        AddItems(list, "postSkeletron", NPC.downedBoss3);
+        AddItems(list, "postDeerclops", NPC.downedDeerclops);
+        AddItems(list, "postWallOfFlesh", Main.hardMode);
+        AddItems(list, "postQueenSlime", NPC.downedQueenSlime);
+        AddItems(list, "postDukeFishron", NPC.downedFishron);
+        AddItems(list, "postEmpressOfLight", NPC.downedEmpressOfLight);
+        AddItems(
+            list,
+            "postMech",
+            NPC.downedMechBoss1 && NPC.downedMechBoss2 && NPC.downedMechBoss3
+        );
+        AddItems(list, "postPlantera", NPC.downedPlantBoss);
+        AddItems(list, "postGolem", NPC.downedGolemBoss);
+        AddItems(list, "postLunaticCultist", NPC.downedAncientCultist);
+        AddItems(list, "postMoonlord", NPC.downedMoonlord);
+
+        return list;
+    }
+
+    private static void AddItems(List<ShopItem> list, string key, bool condition)
+    {
+        if (condition)
+        {
+            foreach (var item in Shop.Items[key])
+            {
+                list.Add(item);
             }
         }
     }

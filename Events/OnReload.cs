@@ -20,8 +20,10 @@ public class OnReload : Event
     private void EventMethod(ReloadEventArgs e)
     {
         TSPlayer player = e.Player;
-        ResponseMessage response = PluginSettings.Load();
-        player.SendMessage(response.Text, response.Color);
-        ShopItems.LoadShop();
+
+        ResponseMessage ConfigResponse = PluginSettings.Load();
+        player.SendMessage(ConfigResponse.Text, ConfigResponse.Color);
+        ResponseMessage ShopItemsResponse = ShopItems.LoadShop();
+        player.SendMessage(ShopItemsResponse.Text, ShopItemsResponse.Color);
     }
 }
