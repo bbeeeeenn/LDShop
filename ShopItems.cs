@@ -8,6 +8,12 @@ namespace LDShop;
 
 public class ShopItems
 {
+    public struct ItemPlace
+    {
+        public int index;
+        public string key;
+    }
+
     public static ShopItems Shop { get; set; } = new();
     private static readonly string Path = PluginSettings.Config.ShopListPath;
     public Dictionary<string, List<ShopItem>> Items = new()
@@ -139,7 +145,6 @@ public class ShopItems
     public static List<ShopItem> GetList()
     {
         List<ShopItem> list = new();
-
         AddItems(list, "regular", true);
         AddItems(list, "postKingSlime", NPC.downedSlimeKing);
         AddItems(list, "postEyeOfCthulhu", NPC.downedBoss1);
@@ -160,7 +165,6 @@ public class ShopItems
         AddItems(list, "postGolem", NPC.downedGolemBoss);
         AddItems(list, "postLunaticCultist", NPC.downedAncientCultist);
         AddItems(list, "postMoonlord", NPC.downedMoonlord);
-
         return list;
     }
 
@@ -173,5 +177,22 @@ public class ShopItems
                 list.Add(item);
             }
         }
+    }
+
+    public static ItemPlace GetItemPlace(int index)
+    {
+        int currentIndex = 0;
+        foreach (string key in Shop.Items.Keys)
+        {
+            if (index - currentIndex <= Shop.Items[key].Count)
+            {
+                return new() { index = index - currentIndex - 1, key = key };
+            }
+            else
+            {
+                currentIndex += Shop.Items[key].Count;
+            }
+        }
+        return new() { index = -1, key = "regular" };
     }
 }
