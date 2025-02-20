@@ -8,7 +8,7 @@ namespace LDShop;
 public class ShopItems
 {
     private static readonly string Path = PluginSettings.Config.ShopListPath;
-    public Dictionary<string, List<Models.ShopItem>> Items = new()
+    public Dictionary<string, List<ShopItem>> Items = new()
     {
         {
             "regular",
