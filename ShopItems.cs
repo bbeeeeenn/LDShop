@@ -181,6 +181,7 @@ public class ShopItems
 
     public static ItemPlace GetItemPlace(int index)
     {
+        // TODO: This is wrong
         int currentIndex = 0;
         foreach (string key in Shop.Items.Keys)
         {
