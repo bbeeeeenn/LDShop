@@ -87,6 +87,7 @@ public class Shop : Models.Command
             return;
         }
 
+        // var itemPlace =
         var PlayerBanks = LDEconomy.Variables.PlayerMoney;
         ShopItem wantedItem = ItemList[itemIndex - 1];
         Item item = TShock.Utils.GetItemById(wantedItem.netID);
@@ -164,10 +165,12 @@ public class Shop : Models.Command
     {
         if (condition)
         {
-            foreach (var item in PluginSettings.Config.Items[key])
+            foreach (var item in ShopItems.Shop.Items[key])
             {
                 list.Add(item);
             }
         }
     }
+
+    private static void Place(byte index) { }
 }

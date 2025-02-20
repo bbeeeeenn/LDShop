@@ -23,6 +23,9 @@ namespace LDShop
             EventManager.RegisterAll(this);
             // Load commands
             CommandManager.RegisterAll();
+
+            // Load Shop
+            ShopItems.LoadShop();
         }
 
         protected override void Dispose(bool disposing)
