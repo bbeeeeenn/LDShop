@@ -86,7 +86,6 @@ public class Shop : Models.Command
             return;
         }
 
-        var PlayerBanks = LDEconomy.Variables.PlayerMoney;
         var itemPlace = ShopItems.GetItemPlace(itemIndex);
         ShopItem itemFromShop = ShopItems.Shop.Items[itemPlace.key][itemPlace.index];
         Item item = TShock.Utils.GetItemById(itemFromShop.netID);
@@ -123,7 +122,7 @@ public class Shop : Models.Command
         }
 
         long totalCost = itemFromShop.buyprice * quantity;
-        if (totalCost > PlayerBanks[player.Account.Name])
+        if (totalCost > LDEconomy.Variables.PlayerMoney[player.Account.Name])
         {
             player.SendErrorMessage(
                 $"[SHOP] You do not have enough balance to buy {quantity}x [i/p{itemFromShop.prefixID}:{itemFromShop.netID}]."

@@ -145,11 +145,11 @@ public class ShopItems
     public static List<ShopItem> GetUnlockedItemList()
     {
         List<ShopItem> list = new();
-        foreach (var key in Shop.Items.Keys)
+        foreach (var (key, value) in Shop.Items)
         {
             if (BossDown(key))
             {
-                foreach (var item in Shop.Items[key])
+                foreach (var item in value)
                     list.Add(item);
             }
         }
