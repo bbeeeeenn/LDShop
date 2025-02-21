@@ -145,38 +145,15 @@ public class ShopItems
     public static List<ShopItem> GetUnlockedItemList()
     {
         List<ShopItem> list = new();
-        AddItems(list, "regular", true);
-        AddItems(list, "postKingSlime", NPC.downedSlimeKing);
-        AddItems(list, "postEyeOfCthulhu", NPC.downedBoss1);
-        AddItems(list, "postEvilBoss", NPC.downedBoss2);
-        AddItems(list, "postQueenBee", NPC.downedQueenBee);
-        AddItems(list, "postSkeletron", NPC.downedBoss3);
-        AddItems(list, "postDeerclops", NPC.downedDeerclops);
-        AddItems(list, "postWallOfFlesh", Main.hardMode);
-        AddItems(list, "postQueenSlime", NPC.downedQueenSlime);
-        AddItems(list, "postDukeFishron", NPC.downedFishron);
-        AddItems(list, "postEmpressOfLight", NPC.downedEmpressOfLight);
-        AddItems(
-            list,
-            "postMech",
-            NPC.downedMechBoss1 && NPC.downedMechBoss2 && NPC.downedMechBoss3
-        );
-        AddItems(list, "postPlantera", NPC.downedPlantBoss);
-        AddItems(list, "postGolem", NPC.downedGolemBoss);
-        AddItems(list, "postLunaticCultist", NPC.downedAncientCultist);
-        AddItems(list, "postMoonlord", NPC.downedMoonlord);
-        return list;
-    }
-
-    private static void AddItems(List<ShopItem> list, string key, bool condition)
-    {
-        if (condition)
+        foreach (var key in Shop.Items.Keys)
         {
-            foreach (var item in Shop.Items[key])
+            if (BossDown(key))
             {
-                list.Add(item);
+                foreach (var item in Shop.Items[key])
+                    list.Add(item);
             }
         }
+        return list;
     }
 
     public static ItemPlace GetItemPlace(int index)
@@ -207,7 +184,7 @@ public class ShopItems
             "postEvilBoss" => NPC.downedBoss2,
             "postQueenBee" => NPC.downedQueenBee,
             "postSkeletron" => NPC.downedBoss3,
-            "PostDeerclops" => NPC.downedDeerclops,
+            "postDeerclops" => NPC.downedDeerclops,
             "postWallOfFlesh" => Main.hardMode,
             "postQueenSlime" => NPC.downedQueenSlime,
             "postDukeFishron" => NPC.downedFishron,
