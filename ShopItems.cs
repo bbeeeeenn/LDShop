@@ -142,7 +142,7 @@ public class ShopItems
         }
     }
 
-    public static List<ShopItem> GetList()
+    public static List<ShopItem> GetUnlockedItemList()
     {
         List<ShopItem> list = new();
         AddItems(list, "regular", true);
@@ -184,6 +184,8 @@ public class ShopItems
         int currentPlace = 0;
         foreach (string key in Shop.Items.Keys)
         {
+            if (!BossDown(key))
+                continue;
             if (index - currentPlace <= Shop.Items[key].Count)
             {
                 return new() { index = index - currentPlace - 1, key = key };
@@ -196,8 +198,26 @@ public class ShopItems
         return new() { index = -1, key = "regular" };
     }
 
-    public static int GetItemCount()
+    public static bool BossDown(string key)
     {
-        return Shop.Items.Values.Sum(list => list.Count);
+        return key switch
+        {
+            "postKingSlime" => NPC.downedSlimeKing,
+            "postEyeOfCthulhu" => NPC.downedBoss1,
+            "postEvilBoss" => NPC.downedBoss2,
+            "postQueenBee" => NPC.downedQueenBee,
+            "postSkeletron" => NPC.downedBoss3,
+            "PostDeerclops" => NPC.downedDeerclops,
+            "postWallOfFlesh" => Main.hardMode,
+            "postQueenSlime" => NPC.downedQueenSlime,
+            "postDukeFishron" => NPC.downedFishron,
+            "postEmpressOfLight" => NPC.downedEmpressOfLight,
+            "postMech" => NPC.downedMechBoss1 && NPC.downedMechBoss2 && NPC.downedMechBoss3,
+            "postPlantera" => NPC.downedPlantBoss,
+            "postGolem" => NPC.downedGolemBoss,
+            "postLunaticCultist" => NPC.downedAncientCultist,
+            "postMoonlord" => NPC.downedMoonlord,
+            _ => true,
+        };
     }
 }

@@ -23,7 +23,7 @@ public class Shop : Models.Command
                     + "/shop buy <item index/name> [quantity] - Buys an item using its index or name. Example: /shop buy 1.\n"
                     + "/shop sell - Sells the item you are currently holding.\n"
                     + "/shop search [item ID/name] - Searches for an item by ID, name, or the item selected in your hotbar. Displays its price and index.",
-                Color.AliceBlue
+                Color.Cyan
             );
 
             return;
@@ -52,7 +52,7 @@ public class Shop : Models.Command
                 + string.Join(
                     "\n",
                     ShopItems
-                        .GetList()
+                        .GetUnlockedItemList()
                         .Select(
                             (item, i) =>
                             {
@@ -78,7 +78,7 @@ public class Shop : Models.Command
 
         if (
             !int.TryParse(parameters[1], out int itemIndex)
-            || itemIndex > ShopItems.GetItemCount()
+            || itemIndex > ShopItems.GetUnlockedItemList().Count
             || itemIndex < 1
         )
         {
@@ -176,6 +176,7 @@ public class Shop : Models.Command
                 $"[SHOP] You only have {freeSlots} available inventory slots for this item."
             );
             quantity = freeSlots;
+            totalCost = itemFromShop.buyprice * quantity;
         }
 
         // Give the item
