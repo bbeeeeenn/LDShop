@@ -21,8 +21,7 @@ public class Shop : Models.Command
                 "Shop Commands:\n"
                     + "/shop list - Lists all items available in the shop.\n"
                     + "/shop buy <item index/name> [quantity] - Buys an item using its index or name. Example: /shop buy 1.\n"
-                    + "/shop sell - Sells the item you are currently holding.\n"
-                    + "/shop search [item ID/name] - Searches for an item by ID, name, or the item selected in your hotbar. Displays its price and index.",
+                    + "/shop sell - Sells the item you are currently holding.\n",
                 Color.Cyan
             );
 
@@ -36,6 +35,9 @@ public class Shop : Models.Command
                 break;
             case "buy":
                 ShopBuy(player, args.Parameters);
+                break;
+            case "sell":
+                ShopSell(player, args.Parameters);
                 break;
             default:
                 player.SendErrorMessage(
@@ -195,5 +197,10 @@ public class Shop : Models.Command
         shopItem.amount -= quantity;
         ShopItems.Shop.Items[itemPlaceInShop.key][itemPlaceInShop.index] = shopItem;
         ShopItems.SaveShop();
+    }
+
+    private void ShopSell(TSPlayer player, List<string> parameters)
+    {
+        throw new NotImplementedException();
     }
 }
