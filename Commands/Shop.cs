@@ -76,11 +76,9 @@ public class Shop : Models.Command
             return;
         }
 
-        var ItemList = ShopItems.GetList();
-
         if (
             !int.TryParse(parameters[1], out int itemIndex)
-            || itemIndex > ItemList.Count
+            || itemIndex > ShopItems.GetItemCount()
             || itemIndex < 1
         )
         {
@@ -89,55 +87,113 @@ public class Shop : Models.Command
         }
 
         var PlayerBanks = LDEconomy.Variables.PlayerMoney;
-        ShopItem wantedItem = ItemList[itemIndex - 1];
-        Item item = TShock.Utils.GetItemById(wantedItem.netID);
+        var itemPlace = ShopItems.GetItemPlace(itemIndex);
+        ShopItem itemFromShop = ShopItems.Shop.Items[itemPlace.key][itemPlace.index];
+        Item item = TShock.Utils.GetItemById(itemFromShop.netID);
+        item.prefix = itemFromShop.prefixID;
         int quantity = 1;
 
         if (parameters.Count >= 3 && int.TryParse(parameters[2], out int n) && n > 1)
+        // Get wanted quantity
         {
+            if (n > 9999)
+            {
+                n = 9999;
+                player.SendInfoMessage(
+                    "[SHOP] You can only set the quantity to a maximum of 9999."
+                );
+            }
             quantity = n;
         }
 
-        if (wantedItem.amount == 0)
+        if (itemFromShop.amount >= 0) // Skip if the item is infinite
         {
-            player.SendErrorMessage("[SHOP] This item is out of stock.");
-            return;
+            if (itemFromShop.amount == 0)
+            {
+                player.SendErrorMessage("[SHOP] This item is out of stock.");
+                return;
+            }
+            else if (itemFromShop.amount < quantity)
+            {
+                player.SendInfoMessage(
+                    $"[SHOP] There's only x{itemFromShop.amount} of [i/p{itemFromShop.prefixID}:{itemFromShop.netID}] left in the shop."
+                );
+                quantity = itemFromShop.amount;
+            }
         }
-        if (wantedItem.buyprice * quantity > PlayerBanks[player.Account.Name])
+
+        long totalCost = itemFromShop.buyprice * quantity;
+        if (totalCost > PlayerBanks[player.Account.Name])
         {
             player.SendErrorMessage(
-                $"[SHOP] You do not have enough coins to buy {quantity}x [i/p{wantedItem.prefixID}:{wantedItem.netID}]."
+                $"[SHOP] You do not have enough balance to buy {quantity}x [i/p{itemFromShop.prefixID}:{itemFromShop.netID}]."
             );
             return;
         }
-        if (!player.InventorySlotAvailable)
-        {
-            player.SendErrorMessage("[SHOP] You do not have enough inventory space.");
-            return;
-        }
+
+        // Check free inventory slots and give item
+        int freeSlots = 0;
+        bool uniqueItem = false;
 
         if (item.maxStack == 1)
+            uniqueItem = true;
+        for (int i = 0; i < NetItem.InventorySlots - 1; i++)
+        // Loop through inventory slots
         {
-            for (int i = 0; i < quantity; i++)
+            Item slot = player.TPlayer.inventory[i];
+            if (i > 49 && i < 54)
+                // Skip coin slots
+                continue;
+            if (!uniqueItem)
             {
-                player.GiveItem(wantedItem.netID, 1, wantedItem.prefixID);
+                if (slot.netID == 0 || slot.netID == item.netID)
+                {
+                    if (!item.FitsAmmoSlot() && i > 53)
+                        continue;
+                    if (slot.netID == 0)
+                        freeSlots += item.maxStack;
+                    else
+                        freeSlots += slot.maxStack - slot.stack;
+                }
+            }
+            else
+            {
+                if (slot.netID == 0 && i < 50)
+                {
+                    freeSlots++;
+                }
             }
         }
-        else
+
+        if (freeSlots == 0)
         {
-            player.GiveItem(wantedItem.netID, quantity);
+            player.SendErrorMessage("[SHOP] You have no available inventory space for this item.");
+            return;
+        }
+        if (freeSlots < quantity)
+        {
+            player.SendInfoMessage(
+                $"[SHOP] You only have {freeSlots} available inventory slots for this item."
+            );
+            quantity = freeSlots;
         }
 
-        EconomyUtils.TakeMoney(player, wantedItem.buyprice * quantity);
+        // Give the item
+        if (uniqueItem)
+            for (int i = 0; i < quantity; i++)
+                player.GiveItem(item.netID, 1, itemFromShop.prefixID);
+        else
+            player.GiveItem(item.netID, quantity);
+
+        EconomyUtils.TakeMoney(player, totalCost);
         player.SendSuccessMessage(
-            $"[SHOP] You successfully bought {quantity}x [i/p{wantedItem.prefixID}:{wantedItem.netID}] for {EconomyUtils.BalanceToCoin(wantedItem.buyprice * quantity)[1]}."
+            $"[SHOP] You successfully bought {quantity}x [i/p{itemFromShop.prefixID}:{itemFromShop.netID}] for {EconomyUtils.BalanceToCoin(totalCost)[1]}."
         );
-        var itemPlaceInShop = ShopItems.GetItemPlace(itemIndex);
-        var shopItem = ShopItems.Shop.Items[itemPlaceInShop.key][itemPlaceInShop.index];
-        if (shopItem.amount > 0)
-        {
-            shopItem.amount -= quantity;
-        }
+
+        ShopItems.ItemPlace itemPlaceInShop = ShopItems.GetItemPlace(itemIndex);
+        ShopItem shopItem = ShopItems.Shop.Items[itemPlaceInShop.key][itemPlaceInShop.index];
+        shopItem.amount -= quantity;
         ShopItems.Shop.Items[itemPlaceInShop.key][itemPlaceInShop.index] = shopItem;
+        ShopItems.SaveShop();
     }
 }

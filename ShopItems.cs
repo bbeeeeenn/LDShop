@@ -195,4 +195,9 @@ public class ShopItems
         }
         return new() { index = -1, key = "regular" };
     }
+
+    public static int GetItemCount()
+    {
+        return Shop.Items.Values.Sum(list => list.Count);
+    }
 }

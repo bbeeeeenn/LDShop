@@ -32,7 +32,14 @@ namespace LDShop
 
         private void TestCmd(CommandArgs args)
         {
-            args.Player.SendInfoMessage(string.Join("\n", ShopItems.Shop.Items.Keys));
+            args.Player.SendInfoMessage(
+                string.Join(
+                    ", ",
+                    args.Player.TPlayer.inventory.Select(
+                        (item, i) => $"[{i}|{item.Name}|{item.netID}]"
+                    )
+                )
+            );
         }
 
         protected override void Dispose(bool disposing)
