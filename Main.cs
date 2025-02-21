@@ -26,6 +26,13 @@ namespace LDShop
 
             // Load Shop
             TShock.Log.ConsoleInfo(ShopItems.LoadShop().Text);
+
+            TShockAPI.Commands.ChatCommands.Add(new Command(TestCmd, "test"));
+        }
+
+        private void TestCmd(CommandArgs args)
+        {
+            args.Player.SendInfoMessage(string.Join("\n", ShopItems.Shop.Items.Keys));
         }
 
         protected override void Dispose(bool disposing)

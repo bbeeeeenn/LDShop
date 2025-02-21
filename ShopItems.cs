@@ -181,17 +181,16 @@ public class ShopItems
 
     public static ItemPlace GetItemPlace(int index)
     {
-        // TODO: This is wrong
-        int currentIndex = 0;
+        int currentPlace = 0;
         foreach (string key in Shop.Items.Keys)
         {
-            if (index - currentIndex <= Shop.Items[key].Count)
+            if (index - currentPlace <= Shop.Items[key].Count)
             {
-                return new() { index = index - currentIndex - 1, key = key };
+                return new() { index = index - currentPlace - 1, key = key };
             }
             else
             {
-                currentIndex += Shop.Items[key].Count;
+                currentPlace += Shop.Items[key].Count;
             }
         }
         return new() { index = -1, key = "regular" };

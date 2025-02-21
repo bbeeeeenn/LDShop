@@ -88,7 +88,6 @@ public class Shop : Models.Command
             return;
         }
 
-        // var itemPlace =
         var PlayerBanks = LDEconomy.Variables.PlayerMoney;
         ShopItem wantedItem = ItemList[itemIndex - 1];
         Item item = TShock.Utils.GetItemById(wantedItem.netID);
@@ -133,5 +132,12 @@ public class Shop : Models.Command
         player.SendSuccessMessage(
             $"[SHOP] You successfully bought {quantity}x [i/p{wantedItem.prefixID}:{wantedItem.netID}] for {EconomyUtils.BalanceToCoin(wantedItem.buyprice * quantity)[1]}."
         );
+        var itemPlaceInShop = ShopItems.GetItemPlace(itemIndex);
+        var shopItem = ShopItems.Shop.Items[itemPlaceInShop.key][itemPlaceInShop.index];
+        if (shopItem.amount > 0)
+        {
+            shopItem.amount -= quantity;
+        }
+        ShopItems.Shop.Items[itemPlaceInShop.key][itemPlaceInShop.index] = shopItem;
     }
 }
