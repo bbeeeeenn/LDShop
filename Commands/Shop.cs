@@ -208,7 +208,7 @@ public class Shop : Models.Command
 
         if (selectedItem.netID == 0)
         {
-            player.SendErrorMessage("[]");
+            player.SendErrorMessage("[SHOP] ");
             return;
         }
     }
