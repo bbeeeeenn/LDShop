@@ -188,7 +188,7 @@ public class Shop : Models.Command
 
         EconomyUtils.TakeMoney(player, totalCost);
         player.SendSuccessMessage(
-            $"[SHOP] You successfully bought {quantity}x [i/p{itemFromShop.prefixID}:{itemFromShop.netID}] for {EconomyUtils.BalanceToCoin(totalCost)[1]}."
+            $"[SHOP] You successfully bought x{quantity} [i/p{itemFromShop.prefixID}:{itemFromShop.netID}] for {EconomyUtils.BalanceToCoin(totalCost)[1]}."
         );
 
         ShopItems.ItemPlace itemPlaceInShop = ShopItems.GetItemPlace(itemIndex);
