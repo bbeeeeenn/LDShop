@@ -37,7 +37,7 @@ public class Shop : Models.Command
                 ShopBuy(player, args.Parameters);
                 break;
             case "sell":
-                ShopSell(player, args.Parameters);
+                ShopSell(player);
                 break;
             default:
                 player.SendErrorMessage(
@@ -127,7 +127,7 @@ public class Shop : Models.Command
         if (totalCost > LDEconomy.Variables.PlayerMoney[player.Account.Name])
         {
             player.SendErrorMessage(
-                $"[SHOP] You do not have enough balance to buy {quantity}x [i/p{itemFromShop.prefixID}:{itemFromShop.netID}]."
+                $"[SHOP] You do not have enough balance to buy x{quantity} [i/p{itemFromShop.prefixID}:{itemFromShop.netID}]."
             );
             return;
         }
@@ -199,8 +199,17 @@ public class Shop : Models.Command
         ShopItems.SaveShop();
     }
 
-    private void ShopSell(TSPlayer player, List<string> parameters)
+    private static void ShopSell(TSPlayer player)
     {
-        throw new NotImplementedException();
+        Item selectedItem = player.SelectedItem;
+        ShopItem? shopItem = ShopItems
+            .GetUnlockedItemList()
+            .FirstOrDefault(item => item.netID == selectedItem.netID);
+
+        if (selectedItem.netID == 0)
+        {
+            player.SendErrorMessage("[]");
+            return;
+        }
     }
 }
