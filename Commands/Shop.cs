@@ -202,14 +202,53 @@ public class Shop : Models.Command
     private static void ShopSell(TSPlayer player)
     {
         Item selectedItem = player.SelectedItem;
-        ShopItem? shopItem = ShopItems
+        ShopItem shopItem = ShopItems
             .GetUnlockedItemList()
             .FirstOrDefault(item => item.netID == selectedItem.netID);
 
         if (selectedItem.netID == 0)
         {
-            player.SendErrorMessage("[SHOP] ");
+            player.SendErrorMessage(
+                "[SHOP] Please select an item in your hotbar and then type /shop sell."
+            );
             return;
         }
+
+        if (shopItem.sellprice == 0)
+        {
+            player.SendErrorMessage("[SHOP] Sorry, we are not buying that item.");
+            return;
+        }
+
+        if (shopItem.amount >= 0)
+        {
+            shopItem.amount += selectedItem.stack;
+            foreach (var (key, list) in ShopItems.Shop.Items)
+            {
+                bool done = false;
+                for (int i = 0; i < list.Count; i++)
+                {
+                    if (list[i].netID == shopItem.netID)
+                    {
+                        ShopItems.Shop.Items[key][i] = shopItem;
+                        done = true;
+                        break;
+                    }
+                }
+                if (done)
+                    break;
+            }
+        }
+        ShopItems.SaveShop();
+
+        long totalCost = shopItem.sellprice * selectedItem.stack;
+        EconomyUtils.GiveMoney(player, totalCost);
+        player.SendSuccessMessage(
+            $"[SHOP] You successfully sold x{selectedItem.stack} [i/p{selectedItem.prefix}:{shopItem.netID}] for {EconomyUtils.BalanceToCoin(totalCost)[1]}."
+        );
+
+        selectedItem.stack = 0;
+        for (byte i = 0; i < NetItem.InventorySlots; i++)
+            player.SendData(PacketTypes.PlayerSlot, "", player.Index, i);
     }
 }
