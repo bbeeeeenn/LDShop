@@ -27,20 +27,20 @@ namespace LDShop
             // Load Shop
             TShock.Log.ConsoleInfo(ShopItems.LoadShop().Text);
 
-            TShockAPI.Commands.ChatCommands.Add(new Command(TestCmd, "test"));
+            // TShockAPI.Commands.ChatCommands.Add(new Command(TestCmd, "test"));
         }
 
-        private void TestCmd(CommandArgs args)
-        {
-            args.Player.SendInfoMessage(
-                string.Join(
-                    ", ",
-                    args.Player.TPlayer.inventory.Select(
-                        (item, i) => $"[{i}|{item.Name}|{item.netID}]"
-                    )
-                )
-            );
-        }
+        // private void TestCmd(CommandArgs args)
+        // {
+        //     args.Player.SendInfoMessage(
+        //         string.Join(
+        //             ", ",
+        //             args.Player.TPlayer.inventory.Select(
+        //                 (item, i) => $"[{i}|{item.Name}|{item.netID}]"
+        //             )
+        //         )
+        //     );
+        // }
 
         protected override void Dispose(bool disposing)
         {
