@@ -21,7 +21,7 @@ public class Shop : Models.Command
                 "Shop Commands:\n"
                     + "/shop list - Lists all items available in the shop.\n"
                     + "/shop buy <item index/name> [quantity] - Buys an item using its index or name. Example: /shop buy 1.\n"
-                    + "/shop sell - Sells the item you are currently holding.\n",
+                    + "/shop sell - Sells the item you are currently holding.",
                 Color.Cyan
             );
 
@@ -60,7 +60,7 @@ public class Shop : Models.Command
                             {
                                 Item itm = TShock.Utils.GetItemById(item.netID);
                                 itm.prefix = item.prefixID;
-                                return $"- {i + 1} [[i/p{item.prefixID}:{item.netID}]] - {itm.HoverName} ([c/187335:{(item.amount < 0 ? "+" : item.amount)}]) [c/dfe62c:B]: {EconomyUtils.BalanceToCoin(item.buyprice)[1]} [c/e6672c:S]: {EconomyUtils.BalanceToCoin(item.sellprice)[1]}";
+                                return $"- {i + 1} [[i/p{item.prefixID}:{item.netID}]] - {itm.HoverName} {(item.amount < 0 ? "" : $"([c/187335:{item.amount}]) ")}[c/dfe62c:B]: {EconomyUtils.BalanceToCoin(item.buyprice)[1]} [c/e6672c:S]: {EconomyUtils.BalanceToCoin(item.sellprice)[1]}";
                             }
                         )
                 ),
