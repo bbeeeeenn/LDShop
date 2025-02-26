@@ -16,8 +16,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="libs\" />
-    <Folder Include="Utils\" />
   </ItemGroup>
 
 </Project>
