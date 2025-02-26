@@ -28,8 +28,16 @@ public class ShopItems
                     netID = Terraria.ID.ItemID.Zenith,
                     amount = -1,
                     prefixID = Terraria.ID.PrefixID.Legendary,
-                    buyprice = 999000000,
-                    sellprice = 0,
+                    requirements = new()
+                    {
+                        buyprice = 100,
+                        items = new() { { Terraria.ID.ItemID.Wood, 10 } },
+                    },
+                    sellreturn = new()
+                    {
+                        sellprice = 50,
+                        items = new() { { Terraria.ID.ItemID.DirtBlock, 10 } },
+                    },
                 },
             }
         },
